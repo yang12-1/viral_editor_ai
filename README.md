@@ -1,2 +1,19 @@
-# viral_editor_ai
-유튜브 영상 자동 편집 프로젝트
+# VTuber Viral Editor AI
+
+AI-powered automatic VTuber short-form editing system.
+
+## Features
+- Whisper transcription
+- YOLO face tracking
+- Meme insertion
+- FFmpeg rendering
+- Viral score prediction
+- TikTok/Reels optimization
+
+## Installation
+
+pip install -r requirements.txt
+
+## Run
+
+python app/main.py
