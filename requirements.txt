@@ -35,3 +35,5 @@ imageio-ffmpeg
 tqdm
 
 customtkinter
+
+yt-dlp
