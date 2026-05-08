@@ -8,7 +8,7 @@ from app.analyzer.scene_detector import detect_scenes
 from app.analyzer.whisper_transcriber import transcribe_video
 from app.downloader.youtube_downloader import download_youtube_video
 from app.editor.auto_cut import create_highlight
-from app.editor.ffmpeg_renderer import render_shorts_with_subs
+from app.editor.ffmpeg_renderer import normalize_video_for_editing, render_shorts_with_subs
 from app.editor.meme_inserter import insert_meme_sfx_at_peaks
 from app.editor.shorts_formatter import convert_to_vertical
 from app.editor.subtitle_renderer import generate_ass_file
@@ -47,8 +47,17 @@ def run_colab_pipeline(
     source_video = _resolve_input_video(youtube_url=youtube_url, video_path=video_path)
     print(f"[1/8] Source video: {source_video}")
 
+    print("[1.5/8] Normalizing video to H.264/AAC for Colab decoding...")
+    source_video = normalize_video_for_editing(source_video, str(output_dir / "source_normalized.mp4"))
+    print(f"Normalized video: {source_video}")
+
+
     print("[2/8] Scene detection...")
     scenes = detect_scenes(source_video)
+
+    if not scenes:
+        print("[warn] Scene detection returned 0 scenes. Falling back to the first target-duration seconds.")
+        scenes = [{"start": 0.0, "end": float(target_duration), "viral_score": 1.0}]
     print(f"Detected scenes: {len(scenes)}")
 
     print("[3/8] Whisper transcription...")
