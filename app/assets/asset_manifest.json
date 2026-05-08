@@ -1,0 +1,23 @@
+{
+  "fonts": [
+    {
+      "name": "NanumGothic-Bold.ttf",
+      "url": "https://github.com/google/fonts/raw/main/ofl/nanumgothic/NanumGothic-Bold.ttf",
+      "license_note": "Google Fonts / OFL"
+    }
+  ],
+  "sfx": [
+    {
+      "name": "vine_boom.mp3",
+      "url_env": "VINE_BOOM_URL",
+      "license_note": "Set VINE_BOOM_URL to a direct URL you have rights to use."
+    },
+    {
+      "name": "metal_pipe.mp3",
+      "url_env": "METAL_PIPE_URL",
+      "license_note": "Set METAL_PIPE_URL to a direct URL you have rights to use."
+    }
+  ],
+  "bgm": [],
+  "memes": []
+}
