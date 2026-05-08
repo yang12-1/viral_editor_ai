@@ -1,13 +1,15 @@
 import subprocess
+from pathlib import Path
 
 
 def _ass_filter_path(path):
     return path.replace("\\", "/").replace(":", "\\:")
 
 
-def render_shorts_with_subs(input_path, output_path, ass_path):
+def render_shorts_with_subs(input_path, output_path, ass_path, fonts_dir="app/assets/fonts"):
     safe_ass_path = _ass_filter_path(ass_path)
-    vf = f"ass={safe_ass_path},scale=1080:1920"
+    safe_fonts_dir = _ass_filter_path(str(Path(fonts_dir)))
+    vf = f"ass={safe_ass_path}:fontsdir={safe_fonts_dir},scale=1080:1920"
 
     nvenc_cmd = [
         "ffmpeg",
