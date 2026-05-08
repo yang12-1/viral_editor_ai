@@ -1,20 +1,20 @@
-import os
+from pathlib import Path
+
 import requests
 
+
 def ensure_fonts():
-    font_dir = "app/assets/fonts"
-    font_path = os.path.join(font_dir, "NanumGothic-Bold.ttf")
-    
-    if not os.path.exists(font_dir):
-        os.makedirs(font_dir)
-        
-    if not os.path.exists(font_path):
+    font_dir = Path("app/assets/fonts")
+    font_path = font_dir / "NanumGothic-Bold.ttf"
+    font_dir.mkdir(parents=True, exist_ok=True)
+
+    if not font_path.exists() or font_path.stat().st_size == 0:
         print("Font not found. Downloading NanumGothic from Google Fonts...")
-        # 나눔고딕 볼드 직접 다운로드 링크 (예시)
         url = "https://github.com/google/fonts/raw/main/ofl/nanumgothic/NanumGothic-Bold.ttf"
-        response = requests.get(url)
-        with open(font_path, "wb") as f:
-            f.write(response.content)
+        response = requests.get(url, timeout=60)
+        response.raise_for_status()
+        font_path.write_bytes(response.content)
         print("Font downloaded successfully.")
-    
-    return font_path
+
+    return str(font_path)
+
