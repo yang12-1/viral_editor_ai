@@ -16,3 +16,7 @@ def transcribe_video_with_words(video_path):
             "words": segment["words"] # 각 단어의 위치 정보 포함
         })
     return segments
+
+
+def transcribe_video(video_path):
+    return transcribe_video_with_words(video_path)
