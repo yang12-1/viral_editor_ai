@@ -99,3 +99,5 @@ runs/
 
 # ONNX
 *.onnx
+
+.env
