@@ -4,6 +4,7 @@ import os
 try:
     from google.colab import userdata
     OPENAI_API_KEY = userdata.get('OPENAI_API_KEY')
+    GEMINI_API_KEY = userdata.get('GEMINI_API_KEY')
     PEXELS_API_KEY = userdata.get('PEXELS_API_KEY')
     ELEVENLABS_API_KEY = userdata.get('ELEVENLABS_API_KEY')
 except ImportError:
@@ -11,6 +12,7 @@ except ImportError:
     from dotenv import load_dotenv
     load_dotenv()
     OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+    GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
     PEXELS_API_KEY = os.getenv('PEXELS_API_KEY')
     ELEVENLABS_API_KEY = os.getenv('ELEVENLABS_API_KEY')
 
