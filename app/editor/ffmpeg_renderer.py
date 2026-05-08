@@ -54,3 +54,36 @@ def render_shorts_with_subs(input_path, output_path, ass_path, fonts_dir="app/as
         output_path,
     ]
     subprocess.run(cpu_cmd, check=True)
+
+def normalize_video_for_editing(input_path, output_path="input/video_normalized.mp4"):
+    """Transcode to Colab-friendly H.264/AAC for OpenCV, MoviePy, and PySceneDetect."""
+    output_path = str(output_path)
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+
+    cmd = [
+        "ffmpeg",
+        "-y",
+        "-i",
+        str(input_path),
+        "-map",
+        "0:v:0",
+        "-map",
+        "0:a:0?",
+        "-c:v",
+        "libx264",
+        "-preset",
+        "veryfast",
+        "-crf",
+        "20",
+        "-pix_fmt",
+        "yuv420p",
+        "-c:a",
+        "aac",
+        "-b:a",
+        "192k",
+        "-movflags",
+        "+faststart",
+        output_path,
+    ]
+    subprocess.run(cmd, check=True)
+    return output_path
