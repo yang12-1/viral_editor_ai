@@ -1,24 +1,48 @@
-from moviepy.editor import *
+from moviepy.editor import VideoFileClip, concatenate_videoclips
 
 
-def create_highlight(video_path, scenes):
+def create_highlight(video_path, scenes, target_duration=45, min_scene_duration=1.0):
+    """Create a short highlight assembly from detected scenes.
+
+    Current ranking is duration-based because the project does not yet merge
+    transcript/chat/emotion scores into scene objects. The function is written
+    to accept future scene["viral_score"] values without another API change.
+    """
     base_clip = VideoFileClip(video_path)
 
+    if not scenes:
+        end = min(base_clip.duration, target_duration)
+        return base_clip.subclip(0, end)
+
+    ranked_scenes = sorted(
+        scenes,
+        key=lambda scene: scene.get("viral_score", min(scene["end"] - scene["start"], 8)),
+        reverse=True,
+    )
+
     clips = []
+    total_duration = 0.0
 
-    for scene in scenes:
-        start = scene["start"]
-        end = scene["end"]
-
+    for scene in ranked_scenes:
+        start = max(0.0, float(scene["start"]))
+        end = min(float(scene["end"]), base_clip.duration)
         duration = end - start
 
-        if duration < 1:
+        if duration < min_scene_duration:
             continue
 
-        clip = base_clip.subclip(start, end)
+        remaining = target_duration - total_duration
+        if remaining <= 0:
+            break
 
-        clips.append(clip)
+        if duration > remaining:
+            end = start + remaining
+            duration = remaining
 
-    final_clip = concatenate_videoclips(clips)
+        clips.append(base_clip.subclip(start, end))
+        total_duration += duration
 
-    return final_clip
+    if not clips:
+        return base_clip.subclip(0, min(base_clip.duration, target_duration))
+
+    return concatenate_videoclips(clips)
